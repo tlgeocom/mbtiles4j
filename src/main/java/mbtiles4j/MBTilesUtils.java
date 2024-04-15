@@ -22,7 +22,24 @@ public class MBTilesUtils {
 	private final Connection conn;
 
 	private final PreparedStatement ps;
+	private static String ClassAbsolutePath = "";
+	static{
+		ClassAbsolutePath = MBTilesUtils.class.getResource("").getPath();
+	}
+	public static void main(String[] args){
+		System.out.println(Thread.currentThread().getContextClassLoader().getResource(""));
 
+		System.out.println(MBTilesUtils.class.getClassLoader().getResource(""));
+
+		System.out.println(ClassLoader.getSystemResource(""));
+
+		System.out.println(MBTilesUtils.class.getResource("").getPath());
+		System.out.println(MBTilesUtils.class.getResource("/"));
+		//Class文件所在路径
+		System.out.println(new File("/").getAbsolutePath());
+		System.out.println(System.getProperty("user.dir"));
+		System.out.println(ClassAbsolutePath);
+	}
 	private MBTilesUtils(String db) {
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -68,6 +85,8 @@ public class MBTilesUtils {
 		String[] split = dbs.split(Pattern.quote(","));
 		for (String entry : split) {
 			String path = configuration.getProperty(entry + ".path");
+			path = ClassAbsolutePath +"../../../../mbtiles/" + path;
+
 			if (!StringUtils.isEmpty(path)) {
 				result.put(entry, path);
 			}
